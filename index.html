@@ -243,27 +243,54 @@
         .section-header h2 { font-size: 3rem; margin-bottom: 15px; }
 
         .venue-grid {
-            columns: 3 350px; /* Número de columnas y ancho mínimo */
-            column-gap: 30px;
+            column-count: 4;
+            column-gap: 15px;
             width: 100%;
         }
 
         .venue-card {
-            display: inline-block; /* Importante para que funcione con columns */
+            display: inline-block;
             width: 100%;
+            margin-bottom: 15px;
             position: relative;
-            margin-bottom: 30px; /* Espacio vertical entre tarjetas */
             overflow: hidden;
             border-radius: 12px;
             cursor: pointer;
-            break-inside: avoid; /* Evita que la tarjeta se parta entre columnas */
+            break-inside: avoid;
+            background-color: var(--bg-card);
         }
 
         .venue-card img {
             width: 100%;
-            height: auto;
+            height: 100%;
+            object-fit: cover;
             display: block;
             transition: transform 0.8s;
+        }
+
+        /* Proporciones más equilibradas para 4 columnas */
+        .venue-card {
+            aspect-ratio: 1 / 1; /* La mayoría serán cuadrados */
+        }
+
+        .venue-card:nth-child(3n) {
+            aspect-ratio: 3 / 4; /* Algunas un poco más altas */
+        }
+
+        .venue-card:nth-child(5n) {
+            aspect-ratio: 4 / 3; /* Algunas un poco más anchas/bajas */
+        }
+
+        @media (max-width: 1200px) {
+            .venue-grid { column-count: 3; }
+        }
+
+        @media (max-width: 800px) {
+            .venue-grid { column-count: 2; }
+        }
+
+        @media (max-width: 500px) {
+            .venue-grid { column-count: 1; }
         }
         .venue-card:hover img { transform: scale(1.1); filter: brightness(0.7); }
 
