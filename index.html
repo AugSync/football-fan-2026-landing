@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Football Fan 2026 | El Mundial de Norteamérica en tu Bolsillo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #E8E028; /* App Accent Color */
+            --bg-dark: #0A0A0A; /* App Background */
+            --bg-card: #151515;
+            --white: #FFFFFF;
+            --text-dim: #A0A0A0;
+            --tag-mx: #006847;
+            --tag-us: #002868;
+            --tag-ca: #BF0000;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Hero Section */
+        header {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+            background: linear-gradient(rgba(10, 10, 10, 0.7), rgba(10, 10, 10, 0.9)),
+                        url('assets/stadiums/azteca.jpg');
+            background-size: cover;
+            background-position: center;
+            border-bottom: 5px solid var(--primary);
+        }
+
+        .brand-26 {
+            font-size: clamp(8rem, 25vw, 15rem);
+            font-weight: 900;
+            line-height: 0.8;
+            letter-spacing: -10px;
+            margin: 0;
+            background: linear-gradient(to bottom, #fff 50%, var(--primary) 50%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: block;
+        }
+
+        .tagline {
+            font-size: 1.5rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 10px;
+            margin-top: -10px;
+            color: var(--white);
+        }
+
+        .hero-info {
+            margin-top: 30px;
+            max-width: 800px;
+        }
+
+        .hero-info h2 {
+            font-size: 1.2rem;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 25px;
+        }
+
+        .google-play-btn {
+            margin-top: 40px;
+            transition: transform 0.3s;
+            display: inline-block;
+        }
+
+        .google-play-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .google-play-btn img {
+            height: 60px;
+            display: block;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            padding: 100px 5%;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .bento-item {
+            background-color: var(--bg-card);
+            border: 1px solid #222;
+            padding: 40px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .bento-large { grid-column: span 2; text-align: left; display: flex; flex-direction: column; justify-content: center; }
+        .stat-num { font-size: 4rem; font-weight: 900; color: var(--primary); line-height: 1; }
+        .stat-desc { color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; }
+
+        /* App Promo Section */
+        .app-promo {
+            padding: 100px 10%;
+            display: flex;
+            align-items: center;
+            gap: 80px;
+            background-color: #050505;
+        }
+
+        .phone-mockup {
+            width: 300px;
+            height: 650px;
+            background-color: #000;
+            border: 12px solid #1a1a1a;
+            border-radius: 45px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.8);
+            flex-shrink: 0;
+        }
+
+        .mockup-screen {
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+        }
+
+        .mockup-screen img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        .promo-content h2 { font-size: 3rem; margin-bottom: 20px; }
+        .promo-content h2 span { color: var(--primary); }
+        .promo-content p { color: var(--text-dim); font-size: 1.1rem; margin-bottom: 30px; }
+
+        .feature-list { list-style: none; }
+        .feature-list li { margin-bottom: 15px; padding-left: 30px; position: relative; }
+        .feature-list li::before { content: '⚽'; position: absolute; left: 0; color: var(--primary); }
+
+        /* Venue Grid */
+        .venues-section { padding: 100px 5%; }
+        .section-header { margin-bottom: 60px; text-align: center; }
+        .section-header h2 { font-size: 3rem; margin-bottom: 15px; }
+
+        .venue-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 30px;
+        }
+
+        .venue-card {
+            position: relative;
+            height: 450px;
+            overflow: hidden;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
+        .venue-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s; }
+        .venue-card:hover img { transform: scale(1.1); filter: brightness(0.7); }
+
+        .venue-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 40px;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+        }
+
+        .venue-tag { display: inline-block; padding: 4px 12px; font-size: 0.7rem; font-weight: 700; border-radius: 4px; margin-bottom: 10px; }
+        .tag-mx { background-color: var(--tag-mx); }
+        .tag-us { background-color: var(--tag-us); }
+        .tag-ca { background-color: var(--tag-ca); }
+
+        .venue-name { font-size: 1.8rem; font-weight: 800; }
+        .venue-city { color: var(--primary); font-size: 0.9rem; font-weight: 600; text-transform: uppercase; }
+
+        /* Footer */
+        footer { padding: 80px 10% 40px; border-top: 1px solid #111; text-align: center; }
+        .footer-logo { font-size: 2rem; font-weight: 900; margin-bottom: 20px; }
+        .footer-logo span { color: var(--primary); }
+        .socials { display: flex; justify-content: center; gap: 30px; margin-bottom: 40px; }
+        .socials a { color: var(--text-dim); text-decoration: none; font-size: 0.8rem; transition: color 0.3s; }
+        .socials a:hover { color: var(--primary); }
+
+        @media (max-width: 900px) {
+            .app-promo { flex-direction: column; text-align: center; }
+            .stats-section { grid-template-columns: 1fr; }
+            .bento-large { grid-column: auto; }
+            .venue-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1 class="brand-26">26</h1>
+        <p class="tagline">WE ARE 26</p>
+        <div class="hero-info">
+            <h2>Impulsado por Football Fan 2026</h2>
+            <p>La experiencia definitiva del Mundial 2026. Conoce las sedes, sigue los 104 partidos y vive la pasión de tres naciones en una sola aplicación.</p>
+        </div>
+        <a href="https://play.google.com/store/apps/details?id=com.augsync.footballfan" class="google-play-btn" target="_blank">
+            <img src="assets/google-play.png" alt="Get it on Google Play">
+        </a>
+    </header>
+
+    <section class="stats-section">
+        <div class="bento-item bento-large">
+            <span class="stat-num">104</span>
+            <span class="stat-desc">Partidos en Vivo</span>
+            <p style="margin-top: 15px; color: var(--text-dim);">Desde la inauguración en el Estadio Azteca hasta la Gran Final en NY/NJ. Sigue cada minuto en tiempo real.</p>
+        </div>
+        <div class="bento-item">
+            <span class="stat-num">48</span>
+            <span class="stat-desc">Naciones</span>
+        </div>
+        <div class="bento-item">
+            <span class="stat-num">16</span>
+            <span class="stat-desc">Sedes</span>
+        </div>
+    </section>
+
+    <section class="app-promo" id="app">
+        <div class="phone-mockup">
+            <div class="mockup-screen">
+                <img src="assets/app-screenshot.png" alt="Football Fan 2026 App Screenshot">
+            </div>
+        </div>
+        <div class="promo-content">
+            <h2>Football Fan <span>2026</span></h2>
+            <p>Tu entrada digital al mundial más grande de la historia. Diseñada específicamente para los fans que no quieren perderse ni un detalle.</p>
+            <ul class="feature-list">
+                <li><strong>Marcadores en Tiempo Real:</strong> Tecnología de baja latencia para que te enteres del gol antes que nadie.</li>
+                <li><strong>Análisis de Sedes:</strong> Información detallada de los 16 estadios, mapas y guías.</li>
+                <li><strong>Estadísticas Avanzadas:</strong> Posesión, mapas de calor y rendimiento de jugadores.</li>
+                <li><strong>Totalmente Gratis:</strong> Sin suscripciones ocultas para las funciones esenciales.</li>
+            </ul>
+            <a href="#" class="google-play-btn">
+                <img src="assets/google-play.png" alt="Get it on Google Play">
+            </a>
+        </div>
+    </section>
+
+    <section class="venues-section" id="sedes">
+        <div class="section-header">
+            <h2>Sedes Legendarias</h2>
+            <p>Explora los templos donde se escribirá la historia del fútbol en 2026.</p>
+        </div>
+
+        <div class="venue-grid">
+            <!-- Mexico City -->
+            <div class="venue-card">
+                <img src="assets/stadiums/azteca.jpg" alt="Estadio Azteca">
+                <div class="venue-info">
+                    <span class="venue-tag tag-mx">MÉXICO</span>
+                    <h4 class="venue-name">Estadio Azteca</h4>
+                    <p class="venue-city">Ciudad de México</p>
+                </div>
+            </div>
+
+            <!-- NY/NJ -->
+            <div class="venue-card">
+                <img src="assets/stadiums/metlife.jpg" alt="MetLife Stadium">
+                <div class="venue-info">
+                    <span class="venue-tag tag-us">USA</span>
+                    <h4 class="venue-name">MetLife Stadium</h4>
+                    <p class="venue-city">New York / New Jersey</p>
+                </div>
+            </div>
+
+            <!-- LA -->
+            <div class="venue-card">
+                <img src="assets/stadiums/sofi.jpg" alt="SoFi Stadium">
+                <div class="venue-info">
+                    <span class="venue-tag tag-us">USA</span>
+                    <h4 class="venue-name">SoFi Stadium</h4>
+                    <p class="venue-city">Los Ángeles</p>
+                </div>
+            </div>
+
+            <!-- Monterrey -->
+            <div class="venue-card">
+                <img src="assets/stadiums/bbva.jpg" alt="Estadio BBVA">
+                <div class="venue-info">
+                    <span class="venue-tag tag-mx">MÉXICO</span>
+                    <h4 class="venue-name">Estadio BBVA</h4>
+                    <p class="venue-city">Monterrey</p>
+                </div>
+            </div>
+
+            <!-- Vancouver -->
+            <div class="venue-card">
+                <img src="assets/stadiums/bcplace.jpg" alt="BC Place">
+                <div class="venue-info">
+                    <span class="venue-tag tag-ca">CANADÁ</span>
+                    <h4 class="venue-name">BC Place</h4>
+                    <p class="venue-city">Vancouver</p>
+                </div>
+            </div>
+
+            <!-- Miami -->
+            <div class="venue-card">
+                <img src="assets/stadiums/hardrock.jpg" alt="Hard Rock Stadium">
+                <div class="venue-info">
+                    <span class="venue-tag tag-us">USA</span>
+                    <h4 class="venue-name">Hard Rock Stadium</h4>
+                    <p class="venue-city">Miami</p>
+                </div>
+            </div>
+
+            <!-- Atlanta -->
+            <div class="venue-card">
+                <img src="assets/stadiums/mercedesbenz.jpg" alt="Mercedes-Benz Stadium">
+                <div class="venue-info">
+                    <span class="venue-tag tag-us">USA</span>
+                    <h4 class="venue-name">Mercedes-Benz Stadium</h4>
+                    <p class="venue-city">Atlanta</p>
+                </div>
+            </div>
+
+            <!-- Dallas -->
+            <div class="venue-card">
+                <img src="assets/stadiums/att.jpg" alt="AT&T Stadium">
+                <div class="venue-info">
+                    <span class="venue-tag tag-us">USA</span>
+                    <h4 class="venue-name">AT&T Stadium</h4>
+                    <p class="venue-city">Dallas</p>
+                </div>
+            </div>
+
+            <!-- Kansas City -->
+            <div class="venue-card">
+                <img src="assets/stadiums/arrowhead.jpg" alt="Arrowhead Stadium">
+                <div class="venue-info">
+                    <span class="venue-tag tag-us">USA</span>
+                    <h4 class="venue-name">Arrowhead Stadium</h4>
+                    <p class="venue-city">Kansas City</p>
+                </div>
+            </div>
+
+            <!-- San Francisco -->
+            <div class="venue-card">
+                <img src="assets/stadiums/levis.jpg" alt="Levi's Stadium">
+                <div class="venue-info">
+                    <span class="venue-tag tag-us">USA</span>
+                    <h4 class="venue-name">Levi's Stadium</h4>
+                    <p class="venue-city">San Francisco Bay Area</p>
+                </div>
+            </div>
+
+            <!-- Seattle -->
+            <div class="venue-card">
+                <img src="assets/stadiums/lumen.jpg" alt="Lumen Field">
+                <div class="venue-info">
+                    <span class="venue-tag tag-us">USA</span>
+                    <h4 class="venue-name">Lumen Field</h4>
+                    <p class="venue-city">Seattle</p>
+                </div>
+            </div>
+
+            <!-- Philadelphia -->
+            <div class="venue-card">
+                <img src="assets/stadiums/lincoln.jpg" alt="Lincoln Financial Field">
+                <div class="venue-info">
+                    <span class="venue-tag tag-us">USA</span>
+                    <h4 class="venue-name">Lincoln Financial Field</h4>
+                    <p class="venue-city">Philadelphia</p>
+                </div>
+            </div>
+
+            <!-- Houston -->
+            <div class="venue-card">
+                <img src="assets/stadiums/nrg.jpg" alt="NRG Stadium">
+                <div class="venue-info">
+                    <span class="venue-tag tag-us">USA</span>
+                    <h4 class="venue-name">NRG Stadium</h4>
+                    <p class="venue-city">Houston</p>
+                </div>
+            </div>
+
+            <!-- Guadalajara -->
+            <div class="venue-card">
+                <img src="assets/stadiums/akron.jpg" alt="Estadio Akron">
+                <div class="venue-info">
+                    <span class="venue-tag tag-mx">MÉXICO</span>
+                    <h4 class="venue-name">Estadio Akron</h4>
+                    <p class="venue-city">Guadalajara</p>
+                </div>
+            </div>
+
+            <!-- Boston -->
+            <div class="venue-card">
+                <img src="assets/stadiums/gillette.jpg" alt="Gillette Stadium">
+                <div class="venue-info">
+                    <span class="venue-tag tag-us">USA</span>
+                    <h4 class="venue-name">Gillette Stadium</h4>
+                    <p class="venue-city">Boston</p>
+                </div>
+            </div>
+
+            <!-- Toronto -->
+            <div class="venue-card">
+                <img src="assets/stadiums/bmo.jpg" alt="BMO Field">
+                <div class="venue-info">
+                    <span class="venue-tag tag-ca">CANADÁ</span>
+                    <h4 class="venue-name">BMO Field</h4>
+                    <p class="venue-city">Toronto</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-logo">Football Fan <span>2026</span></div>
+        <div class="socials">
+            <a href="https://www.instagram.com/fifaworldcup/" target="_blank">INSTAGRAM</a>
+            <a href="https://x.com/FIFAWorldCup" target="_blank">TWITTER / X</a>
+            <a href="https://www.facebook.com/fifaworldcup/" target="_blank">FACEBOOK</a>
+            <a href="https://www.youtube.com/@fifa" target="_blank">YOUTUBE</a>
+            <a href="https://www.fifa.com/fifaplus" target="_blank">FIFA+</a>
+        </div>
+        <p style="color: #444; font-size: 0.7rem; letter-spacing: 1px; margin-top: 20px;">© 2026 FOOTBALL FAN APP. NO AFILIADO OFICIALMENTE CON FIFA.</p>
+    </footer>
+
+</body>
+</html>
