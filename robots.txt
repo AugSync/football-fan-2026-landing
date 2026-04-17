@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://augsync.github.io/football-fan-2026-landing/sitemap.xml
