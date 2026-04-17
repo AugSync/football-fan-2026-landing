@@ -202,9 +202,21 @@
             display: block;
         }
 
-        .promo-content h2 { font-size: 3rem; margin-bottom: 20px; }
+        .promo-content h2 { font-size: 3rem; margin-bottom: 20px; display: flex; align-items: center; flex-wrap: wrap; gap: 15px; }
         .promo-content h2 span { color: var(--primary); }
         .promo-content p { color: var(--text-dim); font-size: 1.1rem; margin-bottom: 30px; }
+
+        .price-badge {
+            background-color: var(--primary);
+            color: var(--bg-dark);
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 1.2rem;
+            font-weight: 900;
+            letter-spacing: 0;
+            transform: rotate(-2deg);
+            box-shadow: 0 5px 15px rgba(232, 224, 40, 0.3);
+        }
 
         .feature-list { list-style: none; }
         .feature-list li { margin-bottom: 15px; padding-left: 30px; position: relative; }
@@ -302,7 +314,7 @@
             </div>
         </div>
         <div class="promo-content">
-            <h2>Football Fan <span>2026</span></h2>
+            <h2>Football Fan <span>2026</span> <span class="price-badge">$1.99</span></h2>
             <p>Tu entrada digital al mundial más grande de la historia. Diseñada específicamente para los fans que no quieren perderse ni un detalle.</p>
             <ul class="feature-list">
                 <li><strong>Marcadores en Tiempo Real:</strong> Tecnología de baja latencia para que te enteres del gol antes que nadie.</li>
