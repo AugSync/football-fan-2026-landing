@@ -733,9 +733,10 @@
                 const now = new Date().getTime();
                 const distance = targetDate - now;
 
-                if (distance < 0) {
-                    document.getElementById('countdown').style.display = 'none';
-                    return;
+                if (distance <= 0) {
+                    const countdownEl = document.getElementById('countdown');
+                    if (countdownEl) countdownEl.style.display = 'none';
+                    return true;
                 }
 
                 const d = Math.floor(distance / (1000 * 60 * 60 * 24));
@@ -747,10 +748,13 @@
                 document.getElementById('hours').innerText = String(h).padStart(2, '0');
                 document.getElementById('minutes').innerText = String(m).padStart(2, '0');
                 document.getElementById('seconds').innerText = String(s).padStart(2, '0');
+                return false;
             }
 
-            update();
-            setInterval(update, 1000);
+            if (update()) return;
+            const interval = setInterval(() => {
+                if (update()) clearInterval(interval);
+            }, 1000);
         }
 
         function translate() {
