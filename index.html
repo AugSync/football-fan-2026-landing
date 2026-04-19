@@ -319,6 +319,45 @@
         .socials a { color: var(--text-dim); text-decoration: none; font-size: 0.8rem; transition: color 0.3s; }
         .socials a:hover { color: var(--primary); }
 
+        /* Countdown Styling */
+        .countdown-section {
+            padding: 60px 20px;
+            text-align: center;
+            background: linear-gradient(to bottom, #050505, var(--bg-dark));
+            border-top: 1px solid #111;
+            border-bottom: 1px solid #111;
+        }
+
+        .countdown-timer {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        .time-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 100px;
+        }
+
+        .time-block .stat-num {
+            font-size: clamp(3rem, 10vw, 5rem);
+            margin-bottom: 0;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .time-block .stat-detail {
+            margin-top: -5px;
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: var(--text-dim);
+        }
+
         @media (max-width: 900px) {
             .app-promo { flex-direction: column; text-align: center; }
             .stats-section { grid-template-columns: 1fr; }
@@ -346,6 +385,28 @@
             <img src="assets/google-play.png" alt="Get it on Google Play">
         </a>
     </header>
+
+    <section id="countdown" class="countdown-section">
+        <p class="stat-desc" data-i18n="countdown-title">EL MUNDIAL EMPIEZA EN</p>
+        <div class="countdown-timer">
+            <div class="time-block">
+                <span id="days" class="stat-num">00</span>
+                <span class="stat-detail" data-i18n="days">Días</span>
+            </div>
+            <div class="time-block">
+                <span id="hours" class="stat-num">00</span>
+                <span class="stat-detail" data-i18n="hours">Horas</span>
+            </div>
+            <div class="time-block">
+                <span id="minutes" class="stat-num">00</span>
+                <span class="stat-detail" data-i18n="minutes">Minutos</span>
+            </div>
+            <div class="time-block">
+                <span id="seconds" class="stat-num">00</span>
+                <span class="stat-detail" data-i18n="seconds">Segundos</span>
+            </div>
+        </div>
+    </section>
 
     <section class="stats-section">
         <div class="bento-item bento-large">
@@ -617,7 +678,12 @@
                 "country-ca": "CANADÁ",
                 "city-mx": "Ciudad de México",
                 "city-la": "Los Ángeles",
-                "footer-disclaimer": "© 2026 FOOTBALL FAN APP. NO AFILIADO OFICIALMENTE CON FIFA."
+                "footer-disclaimer": "© 2026 FOOTBALL FAN APP. NO AFILIADO OFICIALMENTE CON FIFA.",
+                "countdown-title": "EL MUNDIAL EMPIEZA EN",
+                "days": "Días",
+                "hours": "Horas",
+                "minutes": "Minutos",
+                "seconds": "Segundos"
             },
             en: {
                 "hero-powered": "Powered by Football Fan 2026",
@@ -651,9 +717,41 @@
                 "country-ca": "CANADA",
                 "city-mx": "Mexico City",
                 "city-la": "Los Angeles",
-                "footer-disclaimer": "© 2026 FOOTBALL FAN APP. NOT OFFICIALLY AFFILIATED WITH FIFA."
+                "footer-disclaimer": "© 2026 FOOTBALL FAN APP. NOT OFFICIALLY AFFILIATED WITH FIFA.",
+                "countdown-title": "WORLD CUP STARTS IN",
+                "days": "Days",
+                "hours": "Hours",
+                "minutes": "Minutes",
+                "seconds": "Seconds"
             }
         };
+
+        function startCountdown() {
+            const targetDate = new Date('June 11, 2026 00:00:00').getTime();
+
+            function update() {
+                const now = new Date().getTime();
+                const distance = targetDate - now;
+
+                if (distance < 0) {
+                    document.getElementById('countdown').style.display = 'none';
+                    return;
+                }
+
+                const d = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((distance % (1000 * 60)) / 1000);
+
+                document.getElementById('days').innerText = String(d).padStart(2, '0');
+                document.getElementById('hours').innerText = String(h).padStart(2, '0');
+                document.getElementById('minutes').innerText = String(m).padStart(2, '0');
+                document.getElementById('seconds').innerText = String(s).padStart(2, '0');
+            }
+
+            update();
+            setInterval(update, 1000);
+        }
 
         function translate() {
             const userLang = navigator.language || navigator.userLanguage;
@@ -672,7 +770,10 @@
                 "Football Fan 2026 | The North American World Cup in Your Pocket";
         }
 
-        window.addEventListener('DOMContentLoaded', translate);
+        window.addEventListener('DOMContentLoaded', () => {
+            translate();
+            startCountdown();
+        });
     </script>
 </body>
 </html>
