@@ -321,41 +321,170 @@
 
         /* Countdown Styling */
         .countdown-section {
-            padding: 60px 20px;
+            position: relative;
+            padding: 80px 20px;
             text-align: center;
             background: linear-gradient(to bottom, #050505, var(--bg-dark));
             border-top: 1px solid #111;
             border-bottom: 1px solid #111;
+            overflow: hidden;
+        }
+
+        /* Football field grid background */
+        .countdown-section::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image:
+                linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 80px 80px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Floating football */
+        .countdown-section::after {
+            content: '⚽';
+            position: absolute;
+            font-size: 12rem;
+            opacity: 0.04;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: floatBall 8s ease-in-out infinite;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        @keyframes floatBall {
+            0%, 100% { transform: translate(-50%, -50%) rotate(0deg) scale(1); }
+            25% { transform: translate(-50%, -55%) rotate(90deg) scale(1.05); }
+            50% { transform: translate(-50%, -50%) rotate(180deg) scale(1); }
+            75% { transform: translate(-50%, -45%) rotate(270deg) scale(1.05); }
+        }
+
+        /* Stadium lights */
+        .stadium-lights {
+            position: absolute;
+            top: 15px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            padding: 0 10%;
+            z-index: 1;
+        }
+
+        .light {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #fff;
+            box-shadow: 0 0 8px #fff, 0 0 16px var(--primary);
+            animation: strobe 2.5s infinite ease-in-out;
+        }
+
+        .light:nth-child(3n+1) { animation-delay: 0s; }
+        .light:nth-child(3n+2) { animation-delay: 0.8s; }
+        .light:nth-child(3n+3) { animation-delay: 1.6s; }
+
+        @keyframes strobe {
+            0%, 100% { opacity: 0.2; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.3); }
         }
 
         .countdown-timer {
             display: flex;
             justify-content: center;
-            gap: 40px;
-            margin-top: 25px;
+            gap: 30px;
+            margin-top: 35px;
             flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
         }
 
         .time-block {
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-width: 100px;
+            min-width: 120px;
+            position: relative;
+            padding: 20px 15px;
+            border-radius: 16px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: background 0.3s, border-color 0.3s, transform 0.3s;
+        }
+
+        .time-block:hover {
+            background: rgba(232, 224, 40, 0.05);
+            border-color: rgba(232, 224, 40, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .flip-container {
+            perspective: 500px;
+            display: inline-block;
+            position: relative;
         }
 
         .time-block .stat-num {
-            font-size: clamp(3rem, 10vw, 5rem);
+            font-size: clamp(3.5rem, 10vw, 6rem);
             margin-bottom: 0;
             font-variant-numeric: tabular-nums;
+            display: inline-block;
+            transform-style: preserve-3d;
+            backface-visibility: hidden;
+            line-height: 1;
+        }
+
+        .time-block .stat-num.flip-anim {
+            animation: flipDown 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes flipDown {
+            0% { transform: rotateX(0deg) scale(1); text-shadow: 0 0 0 rgba(232, 224, 40, 0); }
+            40% { transform: rotateX(-90deg) scale(0.85); text-shadow: 0 0 40px rgba(232, 224, 40, 0.6); color: #fff; }
+            60% { transform: rotateX(-90deg) scale(0.85); }
+            100% { transform: rotateX(0deg) scale(1); text-shadow: 0 0 0 rgba(232, 224, 40, 0); }
+        }
+
+        /* Number glow on hover */
+        .time-block:hover .stat-num {
+            text-shadow: 0 0 20px rgba(232, 224, 40, 0.3);
         }
 
         .time-block .stat-detail {
-            margin-top: -5px;
-            font-size: 0.7rem;
-            letter-spacing: 3px;
+            margin-top: 10px;
+            font-size: 0.75rem;
+            letter-spacing: 4px;
             text-transform: uppercase;
             font-weight: 700;
             color: var(--text-dim);
+        }
+
+        /* Goal celebration */
+        .goal-celebration {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2.5rem;
+            pointer-events: none;
+            opacity: 0;
+            z-index: 10;
+        }
+
+        .goal-celebration.active {
+            animation: goalPop 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @keyframes goalPop {
+            0% { transform: translate(-50%, -50%) scale(0) rotate(-180deg); opacity: 0; }
+            30% { transform: translate(-50%, -50%) scale(1.8) rotate(0deg); opacity: 1; }
+            60% { transform: translate(-50%, -120%) scale(1.3) rotate(45deg); opacity: 0.8; }
+            100% { transform: translate(-50%, -180%) scale(0.3) rotate(180deg); opacity: 0; }
         }
 
         @media (max-width: 900px) {
@@ -387,23 +516,40 @@
     </header>
 
     <section id="countdown" class="countdown-section">
+        <div class="stadium-lights">
+            <div class="light"></div><div class="light"></div><div class="light"></div><div class="light"></div>
+            <div class="light"></div><div class="light"></div><div class="light"></div><div class="light"></div>
+            <div class="light"></div><div class="light"></div><div class="light"></div><div class="light"></div>
+        </div>
         <p class="stat-desc" data-i18n="countdown-title">EL MUNDIAL EMPIEZA EN</p>
         <div class="countdown-timer">
             <div class="time-block">
-                <span id="days" class="stat-num">00</span>
+                <div class="flip-container">
+                    <span id="days" class="stat-num">00</span>
+                </div>
                 <span class="stat-detail" data-i18n="days">Días</span>
+                <div class="goal-celebration">⚽</div>
             </div>
             <div class="time-block">
-                <span id="hours" class="stat-num">00</span>
+                <div class="flip-container">
+                    <span id="hours" class="stat-num">00</span>
+                </div>
                 <span class="stat-detail" data-i18n="hours">Horas</span>
+                <div class="goal-celebration">⚽</div>
             </div>
             <div class="time-block">
-                <span id="minutes" class="stat-num">00</span>
+                <div class="flip-container">
+                    <span id="minutes" class="stat-num">00</span>
+                </div>
                 <span class="stat-detail" data-i18n="minutes">Minutos</span>
+                <div class="goal-celebration">⚽</div>
             </div>
             <div class="time-block">
-                <span id="seconds" class="stat-num">00</span>
+                <div class="flip-container">
+                    <span id="seconds" class="stat-num">00</span>
+                </div>
                 <span class="stat-detail" data-i18n="seconds">Segundos</span>
+                <div class="goal-celebration">⚽</div>
             </div>
         </div>
     </section>
@@ -728,6 +874,27 @@
 
         function startCountdown() {
             const targetDate = new Date('June 11, 2026 00:00:00').getTime();
+            const els = {
+                days: document.getElementById('days'),
+                hours: document.getElementById('hours'),
+                minutes: document.getElementById('minutes'),
+                seconds: document.getElementById('seconds')
+            };
+            const prev = { days: '00', hours: '00', minutes: '00', seconds: '00' };
+
+            function animateFlip(el) {
+                el.classList.remove('flip-anim');
+                void el.offsetWidth; // trigger reflow
+                el.classList.add('flip-anim');
+            }
+
+            function triggerGoal() {
+                document.querySelectorAll('.goal-celebration').forEach(g => {
+                    g.classList.remove('active');
+                    void g.offsetWidth;
+                    g.classList.add('active');
+                });
+            }
 
             function update() {
                 const now = new Date().getTime();
@@ -739,15 +906,25 @@
                     return true;
                 }
 
-                const d = Math.floor(distance / (1000 * 60 * 60 * 24));
-                const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                const s = Math.floor((distance % (1000 * 60)) / 1000);
+                const d = String(Math.floor(distance / (1000 * 60 * 60 * 24))).padStart(2, '0');
+                const h = String(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+                const m = String(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+                const s = String(Math.floor((distance % (1000 * 60)) / 1000)).padStart(2, '0');
 
-                document.getElementById('days').innerText = String(d).padStart(2, '0');
-                document.getElementById('hours').innerText = String(h).padStart(2, '0');
-                document.getElementById('minutes').innerText = String(m).padStart(2, '0');
-                document.getElementById('seconds').innerText = String(s).padStart(2, '0');
+                const updates = [['days', d], ['hours', h], ['minutes', m], ['seconds', s]];
+                updates.forEach(([key, val]) => {
+                    if (prev[key] !== val) {
+                        els[key].innerText = val;
+                        animateFlip(els[key]);
+                        prev[key] = val;
+                    }
+                });
+
+                // Mini goal celebration every minute when seconds hit 00
+                if (s === '00') {
+                    triggerGoal();
+                }
+
                 return false;
             }
 
