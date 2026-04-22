@@ -84,6 +84,19 @@
             overflow-x: hidden;
         }
 
+        /* Cinematic noise overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            background-repeat: repeat;
+            background-size: 256px 256px;
+        }
+
         /* Hero Section */
         header {
             height: 100vh;
@@ -93,11 +106,21 @@
             align-items: center;
             text-align: center;
             padding: 0 20px;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 5px solid var(--primary);
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: -10%; left: -10%;
+            width: 120%; height: 120%;
             background: linear-gradient(rgba(10, 10, 10, 0.7), rgba(10, 10, 10, 0.9)),
                         url('assets/stadiums/azteca.jpg');
             background-size: cover;
             background-position: center;
-            border-bottom: 5px solid var(--primary);
+            z-index: -1;
+            will-change: transform;
         }
 
         .brand-26 {
@@ -112,6 +135,12 @@
             display: block;
             width: 100%;
             overflow: visible;
+            animation: heroGlow 4s ease-in-out infinite;
+        }
+
+        @keyframes heroGlow {
+            0%, 100% { filter: drop-shadow(0 0 0px rgba(232, 224, 40, 0)); }
+            50% { filter: drop-shadow(0 0 30px rgba(232, 224, 40, 0.15)); }
         }
 
         .tagline {
@@ -464,6 +493,105 @@
             color: var(--text-dim);
         }
 
+        /* Scroll Reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Stagger children within a reveal parent */
+        .reveal-stagger .reveal-child {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .reveal-stagger.visible .reveal-child:nth-child(1) { transition-delay: 0s; }
+        .reveal-stagger.visible .reveal-child:nth-child(2) { transition-delay: 0.1s; }
+        .reveal-stagger.visible .reveal-child:nth-child(3) { transition-delay: 0.2s; }
+        .reveal-stagger.visible .reveal-child:nth-child(4) { transition-delay: 0.3s; }
+        .reveal-stagger.visible .reveal-child:nth-child(5) { transition-delay: 0.4s; }
+        .reveal-stagger.visible .reveal-child:nth-child(6) { transition-delay: 0.5s; }
+
+        .reveal-stagger.visible .reveal-child {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Phone mockup float */
+        .phone-mockup {
+            animation: phoneFloat 6s ease-in-out infinite;
+        }
+
+        @keyframes phoneFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
+        }
+
+        /* Google Play shine sweep */
+        .google-play-btn {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .google-play-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 50%; height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255,255,255,0.15), transparent);
+            transform: skewX(-20deg);
+            transition: left 0.5s;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .google-play-btn:hover::before {
+            left: 150%;
+        }
+
+        /* Venue card 3D tilt */
+        .venue-card {
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .venue-card img {
+            transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1), filter 0.5s;
+        }
+
+        .venue-card:hover img {
+            transform: scale(1.1);
+            filter: brightness(0.7);
+        }
+
+        /* Section header underline animation */
+        .section-header h2 {
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-header h2::after {
+            content: '';
+            position: absolute;
+            bottom: -8px; left: 50%;
+            width: 0; height: 3px;
+            background: var(--primary);
+            border-radius: 2px;
+            transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1), left 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .section-header h2.revealed::after,
+        .section-header.visible h2::after {
+            width: 60px; left: calc(50% - 30px);
+        }
+
         /* Goal celebration */
         .goal-celebration {
             position: absolute;
@@ -504,6 +632,7 @@
 <body>
 
     <header>
+        <div class="hero-bg" id="heroBg"></div>
         <h1 class="brand-26">26</h1>
         <p class="tagline">WE ARE 26</p>
         <div class="hero-info">
@@ -554,33 +683,33 @@
         </div>
     </section>
 
-    <section class="stats-section">
-        <div class="bento-item bento-large">
+    <section class="stats-section reveal-stagger">
+        <div class="bento-item bento-large reveal-child">
             <span class="stat-num">104</span>
             <span class="stat-desc" data-i18n="stat-matches">Partidos en Vivo</span>
             <p class="stat-detail" data-i18n="stat-matches-desc">Desde la inauguración épica en el legendario Estadio Azteca hasta la Gran Final en el MetLife Stadium de NY/NJ. Una maratón de fútbol sin precedentes que mantendrá al mundo en vilo durante más de un mes.</p>
         </div>
-        <div class="bento-item">
+        <div class="bento-item reveal-child">
             <span class="stat-num">48</span>
             <span class="stat-desc" data-i18n="stat-nations">Naciones</span>
             <p class="stat-detail" data-i18n="stat-nations-desc">El torneo más inclusivo de la historia, con selecciones de todos los continentes compitiendo por la gloria eterna en el escenario más grande.</p>
         </div>
-        <div class="bento-item">
+        <div class="bento-item reveal-child">
             <span class="stat-num">16</span>
             <span class="stat-desc" data-i18n="stat-venues">Sedes</span>
             <p class="stat-detail" data-i18n="stat-venues-desc">Desde estadios históricos hasta maravillas arquitectónicas modernas, 16 ciudades vibrantes listas para recibir a millones de aficionados.</p>
         </div>
-        <div class="bento-item bento-medium">
+        <div class="bento-item bento-medium reveal-child">
             <span class="stat-num">3</span>
             <span class="stat-desc" data-i18n="stat-countries">Países Anfitriones</span>
             <p class="stat-detail" data-i18n="stat-countries-desc">USA, México y Canadá se unen en una alianza histórica para organizar el mundial más grande, diverso y tecnológicamente avanzado que el deporte haya visto jamás.</p>
         </div>
-        <div class="bento-item">
+        <div class="bento-item reveal-child">
             <span class="stat-num">40</span>
             <span class="stat-desc" data-i18n="stat-days">Días</span>
             <p class="stat-detail" data-i18n="stat-days-desc">Más días de fútbol, más emociones y más historias que contar en el torneo con mayor duración de la historia de la FIFA.</p>
         </div>
-        <div class="bento-item">
+        <div class="bento-item reveal-child">
             <span class="stat-num">12</span>
             <span class="stat-desc" data-i18n="stat-groups">Grupos</span>
             <p class="stat-detail" data-i18n="stat-groups-desc">Un formato revolucionario con 12 grupos de 4 equipos, asegurando drama y competitividad desde el primer pitido inicial.</p>
@@ -588,12 +717,12 @@
     </section>
 
     <section class="app-promo" id="app">
-        <div class="phone-mockup">
+        <div class="phone-mockup reveal">
             <div class="mockup-screen">
                 <img src="assets/app-screenshot.png" alt="Football Fan 2026 App Screenshot">
             </div>
         </div>
-        <div class="promo-content">
+        <div class="promo-content reveal">
             <h2>Football Fan <span>2026</span> <span class="price-badge">$1.99</span></h2>
             <p data-i18n="promo-desc">Tu entrada digital al mundial más grande de la historia. Diseñada específicamente para los fans que no quieren perderse ni un detalle.</p>
             <ul class="feature-list">
@@ -610,14 +739,14 @@
     </section>
 
     <section class="venues-section" id="sedes">
-        <div class="section-header">
+        <div class="section-header reveal">
             <h2 data-i18n="venues-title">Sedes Legendarias</h2>
             <p data-i18n="venues-desc">Explora los templos donde se escribirá la historia del fútbol en 2026.</p>
         </div>
 
-        <div class="venue-grid">
+        <div class="venue-grid reveal-stagger">
             <!-- Mexico City -->
-            <div class="venue-card">
+            <div class="venue-card reveal-child">
                 <img src="assets/stadiums/azteca.jpg" alt="Estadio Azteca">
                 <div class="venue-info">
                     <span class="venue-tag tag-mx" data-i18n="country-mx">MÉXICO</span>
@@ -627,7 +756,7 @@
             </div>
 
             <!-- NY/NJ -->
-            <div class="venue-card">
+            <div class="venue-card reveal-child">
                 <img src="assets/stadiums/metlife.jpg" alt="MetLife Stadium">
                 <div class="venue-info">
                     <span class="venue-tag tag-us">USA</span>
@@ -637,7 +766,7 @@
             </div>
 
             <!-- LA -->
-            <div class="venue-card">
+            <div class="venue-card reveal-child">
                 <img src="assets/stadiums/sofi.jpg" alt="SoFi Stadium">
                 <div class="venue-info">
                     <span class="venue-tag tag-us">USA</span>
@@ -647,7 +776,7 @@
             </div>
 
             <!-- Monterrey -->
-            <div class="venue-card">
+            <div class="venue-card reveal-child">
                 <img src="assets/stadiums/bbva.jpg" alt="Estadio BBVA">
                 <div class="venue-info">
                     <span class="venue-tag tag-mx" data-i18n="country-mx">MÉXICO</span>
@@ -657,7 +786,7 @@
             </div>
 
             <!-- Vancouver -->
-            <div class="venue-card">
+            <div class="venue-card reveal-child">
                 <img src="assets/stadiums/bcplace.jpg" alt="BC Place">
                 <div class="venue-info">
                     <span class="venue-tag tag-ca" data-i18n="country-ca">CANADÁ</span>
@@ -667,7 +796,7 @@
             </div>
 
             <!-- Miami -->
-            <div class="venue-card">
+            <div class="venue-card reveal-child">
                 <img src="assets/stadiums/hardrock.jpg" alt="Hard Rock Stadium">
                 <div class="venue-info">
                     <span class="venue-tag tag-us">USA</span>
@@ -677,7 +806,7 @@
             </div>
 
             <!-- Atlanta -->
-            <div class="venue-card">
+            <div class="venue-card reveal-child">
                 <img src="assets/stadiums/mercedesbenz.jpg" alt="Mercedes-Benz Stadium">
                 <div class="venue-info">
                     <span class="venue-tag tag-us">USA</span>
@@ -687,7 +816,7 @@
             </div>
 
             <!-- Dallas -->
-            <div class="venue-card">
+            <div class="venue-card reveal-child">
                 <img src="assets/stadiums/att.jpg" alt="AT&T Stadium">
                 <div class="venue-info">
                     <span class="venue-tag tag-us">USA</span>
@@ -697,7 +826,7 @@
             </div>
 
             <!-- Kansas City -->
-            <div class="venue-card">
+            <div class="venue-card reveal-child">
                 <img src="assets/stadiums/arrowhead.jpg" alt="Arrowhead Stadium">
                 <div class="venue-info">
                     <span class="venue-tag tag-us">USA</span>
@@ -707,7 +836,7 @@
             </div>
 
             <!-- San Francisco -->
-            <div class="venue-card">
+            <div class="venue-card reveal-child">
                 <img src="assets/stadiums/levis.jpg" alt="Levi's Stadium">
                 <div class="venue-info">
                     <span class="venue-tag tag-us">USA</span>
@@ -717,7 +846,7 @@
             </div>
 
             <!-- Seattle -->
-            <div class="venue-card">
+            <div class="venue-card reveal-child">
                 <img src="assets/stadiums/lumen.jpg" alt="Lumen Field">
                 <div class="venue-info">
                     <span class="venue-tag tag-us">USA</span>
@@ -727,7 +856,7 @@
             </div>
 
             <!-- Philadelphia -->
-            <div class="venue-card">
+            <div class="venue-card reveal-child">
                 <img src="assets/stadiums/lincoln.jpg" alt="Lincoln Financial Field">
                 <div class="venue-info">
                     <span class="venue-tag tag-us">USA</span>
@@ -737,7 +866,7 @@
             </div>
 
             <!-- Houston -->
-            <div class="venue-card">
+            <div class="venue-card reveal-child">
                 <img src="assets/stadiums/nrg.jpg" alt="NRG Stadium">
                 <div class="venue-info">
                     <span class="venue-tag tag-us">USA</span>
@@ -747,7 +876,7 @@
             </div>
 
             <!-- Guadalajara -->
-            <div class="venue-card">
+            <div class="venue-card reveal-child">
                 <img src="assets/stadiums/akron.jpg" alt="Estadio Akron">
                 <div class="venue-info">
                     <span class="venue-tag tag-mx" data-i18n="country-mx">MÉXICO</span>
@@ -757,7 +886,7 @@
             </div>
 
             <!-- Boston -->
-            <div class="venue-card">
+            <div class="venue-card reveal-child">
                 <img src="assets/stadiums/gillette.jpg" alt="Gillette Stadium">
                 <div class="venue-info">
                     <span class="venue-tag tag-us">USA</span>
@@ -767,7 +896,7 @@
             </div>
 
             <!-- Toronto -->
-            <div class="venue-card">
+            <div class="venue-card reveal-child">
                 <img src="assets/stadiums/bmo.jpg" alt="BMO Field">
                 <div class="venue-info">
                     <span class="venue-tag tag-ca" data-i18n="country-ca">CANADÁ</span>
@@ -778,7 +907,7 @@
         </div>
     </section>
 
-    <footer>
+    <footer class="reveal">
         <div class="footer-logo">Football Fan <span>2026</span></div>
         <div class="socials">
             <a href="https://www.instagram.com/fifaworldcup/" target="_blank">INSTAGRAM</a>
@@ -951,9 +1080,71 @@
                 "Football Fan 2026 | The North American World Cup in Your Pocket";
         }
 
+        function initParallax() {
+            const heroBg = document.getElementById('heroBg');
+            if (!heroBg) return;
+
+            let ticking = false;
+            window.addEventListener('scroll', () => {
+                if (!ticking) {
+                    requestAnimationFrame(() => {
+                        const scrollY = window.scrollY;
+                        const maxScroll = window.innerHeight;
+                        const progress = Math.min(scrollY / maxScroll, 1);
+                        heroBg.style.transform = `translateY(${scrollY * 0.4}px) scale(${1 + progress * 0.1})`;
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            }, { passive: true });
+        }
+
+        function initScrollReveal() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+            document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        function initVenueTilt() {
+            const cards = document.querySelectorAll('.venue-card');
+            cards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    const rotateX = ((y - centerY) / centerY) * -6;
+                    const rotateY = ((x - centerX) / centerX) * 6;
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+                    card.style.transition = 'transform 0.5s cubic-bezier(0.22, 1, 0.36, 1)';
+                });
+
+                card.addEventListener('mouseenter', () => {
+                    card.style.transition = 'transform 0.1s ease-out';
+                });
+            });
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
             translate();
             startCountdown();
+            initParallax();
+            initScrollReveal();
+            initVenueTilt();
         });
     </script>
 </body>
