@@ -30,6 +30,10 @@
     <link rel="icon" type="image/png" href="assets/favicon.png">
     <link rel="apple-touch-icon" href="assets/favicon.png">
 
+    <!-- Performance Optimization: Preload Critical Assets -->
+    <link rel="preload" as="image" href="assets/stadiums/azteca.jpg" fetchpriority="high">
+    <link rel="preload" as="image" href="assets/google-play.png" fetchpriority="high">
+
     <!-- Structured Data (JSON-LD) for App -->
     <script type="application/ld+json">
     {
@@ -84,6 +88,48 @@
             overflow-x: hidden;
         }
 
+        /* Preloader */
+        #preloader {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: var(--bg-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.8s;
+        }
+
+        #preloader.fade-out {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader-content {
+            text-align: center;
+        }
+
+        .loader-ball {
+            font-size: 4rem;
+            display: inline-block;
+            animation: loaderKick 1.2s infinite ease-in-out;
+        }
+
+        @keyframes loaderKick {
+            0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+            50% { transform: translateY(-40px) rotate(180deg) scale(1.2); }
+        }
+
+        .loader-text {
+            margin-top: 20px;
+            font-weight: 700;
+            letter-spacing: 5px;
+            color: var(--primary);
+            text-transform: uppercase;
+            font-size: 0.8rem;
+        }
+
         /* Cinematic noise overlay */
         body::before {
             content: '';
@@ -129,6 +175,12 @@
             background-position: center;
             z-index: -2;
             will-change: transform;
+            filter: blur(30px); /* Start blurred for optimization */
+            transition: filter 1.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .hero-bg.loaded {
+            filter: blur(0);
         }
 
         /* Cursor spotlight overlay */
@@ -748,6 +800,13 @@
     </style>
 </head>
 <body>
+    <!-- Loading State -->
+    <div id="preloader">
+        <div class="loader-content">
+            <div class="loader-ball">⚽</div>
+            <p class="loader-text" data-i18n="loading">Cargando...</p>
+        </div>
+    </div>
 
     <header id="hero">
         <div class="hero-bg" id="heroBg"></div>
@@ -766,7 +825,7 @@
                 <p data-i18n="hero-desc">La experiencia definitiva del Mundial 2026. Conoce las sedes, sigue los 104 partidos y vive la pasión de tres naciones en una sola aplicación.</p>
             </div>
             <a href="https://play.google.com/store/apps/details?id=com.augsync.footballfan" class="google-play-btn" target="_blank">
-                <img src="assets/google-play.png" alt="Get it on Google Play">
+                <img src="assets/google-play.png" alt="Get it on Google Play" fetchpriority="high">
             </a>
         </div>
     </header>
@@ -846,7 +905,7 @@
     <section class="app-promo" id="app">
         <div class="phone-mockup reveal">
             <div class="mockup-screen">
-                <img src="assets/app-screenshot.png" alt="Football Fan 2026 App Screenshot">
+                <img src="assets/app-screenshot.png" alt="Football Fan 2026 App Screenshot" loading="lazy" decoding="async">
             </div>
         </div>
         <div class="promo-content reveal">
@@ -860,7 +919,7 @@
                 <li><strong data-i18n="feat-free">Totalmente Gratis:</strong> <span data-i18n="feat-free-desc">Las funciones esenciales siempre estarán disponibles sin costo.</span></li>
             </ul>
             <a href="https://play.google.com/store/apps/details?id=com.augsync.footballfan" class="google-play-btn" target="_blank">
-                <img src="assets/google-play.png" alt="Get it on Google Play">
+                <img src="assets/google-play.png" alt="Get it on Google Play" loading="lazy" decoding="async">
             </a>
         </div>
     </section>
@@ -874,7 +933,7 @@
         <div class="venue-grid reveal-stagger">
             <!-- Mexico City -->
             <div class="venue-card reveal-child">
-                <img src="assets/stadiums/azteca.jpg" alt="Estadio Azteca">
+                <img loading="lazy" decoding="async" src="assets/stadiums/azteca.jpg" alt="Estadio Azteca">
                 <div class="venue-info">
                     <span class="venue-tag tag-mx" data-i18n="country-mx">MÉXICO</span>
                     <h4 class="venue-name">Estadio Azteca</h4>
@@ -884,7 +943,7 @@
 
             <!-- NY/NJ -->
             <div class="venue-card reveal-child">
-                <img src="assets/stadiums/metlife.jpg" alt="MetLife Stadium">
+                <img loading="lazy" decoding="async" src="assets/stadiums/metlife.jpg" alt="MetLife Stadium">
                 <div class="venue-info">
                     <span class="venue-tag tag-us">USA</span>
                     <h4 class="venue-name">MetLife Stadium</h4>
@@ -894,7 +953,7 @@
 
             <!-- LA -->
             <div class="venue-card reveal-child">
-                <img src="assets/stadiums/sofi.jpg" alt="SoFi Stadium">
+                <img loading="lazy" decoding="async" src="assets/stadiums/sofi.jpg" alt="SoFi Stadium">
                 <div class="venue-info">
                     <span class="venue-tag tag-us">USA</span>
                     <h4 class="venue-name">SoFi Stadium</h4>
@@ -904,7 +963,7 @@
 
             <!-- Monterrey -->
             <div class="venue-card reveal-child">
-                <img src="assets/stadiums/bbva.jpg" alt="Estadio BBVA">
+                <img loading="lazy" decoding="async" src="assets/stadiums/bbva.jpg" alt="Estadio BBVA">
                 <div class="venue-info">
                     <span class="venue-tag tag-mx" data-i18n="country-mx">MÉXICO</span>
                     <h4 class="venue-name">Estadio BBVA</h4>
@@ -914,7 +973,7 @@
 
             <!-- Vancouver -->
             <div class="venue-card reveal-child">
-                <img src="assets/stadiums/bcplace.jpg" alt="BC Place">
+                <img loading="lazy" decoding="async" src="assets/stadiums/bcplace.jpg" alt="BC Place">
                 <div class="venue-info">
                     <span class="venue-tag tag-ca" data-i18n="country-ca">CANADÁ</span>
                     <h4 class="venue-name">BC Place</h4>
@@ -924,7 +983,7 @@
 
             <!-- Miami -->
             <div class="venue-card reveal-child">
-                <img src="assets/stadiums/hardrock.jpg" alt="Hard Rock Stadium">
+                <img loading="lazy" decoding="async" src="assets/stadiums/hardrock.jpg" alt="Hard Rock Stadium">
                 <div class="venue-info">
                     <span class="venue-tag tag-us">USA</span>
                     <h4 class="venue-name">Hard Rock Stadium</h4>
@@ -934,7 +993,7 @@
 
             <!-- Atlanta -->
             <div class="venue-card reveal-child">
-                <img src="assets/stadiums/mercedesbenz.jpg" alt="Mercedes-Benz Stadium">
+                <img loading="lazy" decoding="async" src="assets/stadiums/mercedesbenz.jpg" alt="Mercedes-Benz Stadium">
                 <div class="venue-info">
                     <span class="venue-tag tag-us">USA</span>
                     <h4 class="venue-name">Mercedes-Benz Stadium</h4>
@@ -944,7 +1003,7 @@
 
             <!-- Dallas -->
             <div class="venue-card reveal-child">
-                <img src="assets/stadiums/att.jpg" alt="AT&T Stadium">
+                <img loading="lazy" decoding="async" src="assets/stadiums/att.jpg" alt="AT&T Stadium">
                 <div class="venue-info">
                     <span class="venue-tag tag-us">USA</span>
                     <h4 class="venue-name">AT&T Stadium</h4>
@@ -954,7 +1013,7 @@
 
             <!-- Kansas City -->
             <div class="venue-card reveal-child">
-                <img src="assets/stadiums/arrowhead.jpg" alt="Arrowhead Stadium">
+                <img loading="lazy" decoding="async" src="assets/stadiums/arrowhead.jpg" alt="Arrowhead Stadium">
                 <div class="venue-info">
                     <span class="venue-tag tag-us">USA</span>
                     <h4 class="venue-name">Arrowhead Stadium</h4>
@@ -964,7 +1023,7 @@
 
             <!-- San Francisco -->
             <div class="venue-card reveal-child">
-                <img src="assets/stadiums/levis.jpg" alt="Levi's Stadium">
+                <img loading="lazy" decoding="async" src="assets/stadiums/levis.jpg" alt="Levi's Stadium">
                 <div class="venue-info">
                     <span class="venue-tag tag-us">USA</span>
                     <h4 class="venue-name">Levi's Stadium</h4>
@@ -974,7 +1033,7 @@
 
             <!-- Seattle -->
             <div class="venue-card reveal-child">
-                <img src="assets/stadiums/lumen.jpg" alt="Lumen Field">
+                <img loading="lazy" decoding="async" src="assets/stadiums/lumen.jpg" alt="Lumen Field">
                 <div class="venue-info">
                     <span class="venue-tag tag-us">USA</span>
                     <h4 class="venue-name">Lumen Field</h4>
@@ -984,7 +1043,7 @@
 
             <!-- Philadelphia -->
             <div class="venue-card reveal-child">
-                <img src="assets/stadiums/lincoln.jpg" alt="Lincoln Financial Field">
+                <img loading="lazy" decoding="async" src="assets/stadiums/lincoln.jpg" alt="Lincoln Financial Field">
                 <div class="venue-info">
                     <span class="venue-tag tag-us">USA</span>
                     <h4 class="venue-name">Lincoln Financial Field</h4>
@@ -994,7 +1053,7 @@
 
             <!-- Houston -->
             <div class="venue-card reveal-child">
-                <img src="assets/stadiums/nrg.jpg" alt="NRG Stadium">
+                <img loading="lazy" decoding="async" src="assets/stadiums/nrg.jpg" alt="NRG Stadium">
                 <div class="venue-info">
                     <span class="venue-tag tag-us">USA</span>
                     <h4 class="venue-name">NRG Stadium</h4>
@@ -1004,7 +1063,7 @@
 
             <!-- Guadalajara -->
             <div class="venue-card reveal-child">
-                <img src="assets/stadiums/akron.jpg" alt="Estadio Akron">
+                <img loading="lazy" decoding="async" src="assets/stadiums/akron.jpg" alt="Estadio Akron">
                 <div class="venue-info">
                     <span class="venue-tag tag-mx" data-i18n="country-mx">MÉXICO</span>
                     <h4 class="venue-name">Estadio Akron</h4>
@@ -1014,7 +1073,7 @@
 
             <!-- Boston -->
             <div class="venue-card reveal-child">
-                <img src="assets/stadiums/gillette.jpg" alt="Gillette Stadium">
+                <img loading="lazy" decoding="async" src="assets/stadiums/gillette.jpg" alt="Gillette Stadium">
                 <div class="venue-info">
                     <span class="venue-tag tag-us">USA</span>
                     <h4 class="venue-name">Gillette Stadium</h4>
@@ -1024,7 +1083,7 @@
 
             <!-- Toronto -->
             <div class="venue-card reveal-child">
-                <img src="assets/stadiums/bmo.jpg" alt="BMO Field">
+                <img loading="lazy" decoding="async" src="assets/stadiums/bmo.jpg" alt="BMO Field">
                 <div class="venue-info">
                     <span class="venue-tag tag-ca" data-i18n="country-ca">CANADÁ</span>
                     <h4 class="venue-name">BMO Field</h4>
@@ -1085,7 +1144,8 @@
                 "days": "Días",
                 "hours": "Horas",
                 "minutes": "Minutos",
-                "seconds": "Segundos"
+                "seconds": "Segundos",
+                "loading": "Cargando..."
             },
             en: {
                 "hero-powered": "Powered by Football Fan 2026",
@@ -1124,7 +1184,8 @@
                 "days": "Days",
                 "hours": "Hours",
                 "minutes": "Minutes",
-                "seconds": "Seconds"
+                "seconds": "Seconds",
+                "loading": "Loading..."
             }
         };
 
@@ -1323,6 +1384,19 @@
             });
         }
 
+        function initPreloader() {
+            const preloader = document.getElementById('preloader');
+            const heroBg = document.getElementById('heroBg');
+
+            // Hide preloader when everything is loaded
+            window.addEventListener('load', () => {
+                setTimeout(() => {
+                    if (preloader) preloader.classList.add('fade-out');
+                    if (heroBg) heroBg.classList.add('loaded');
+                }, 500); // Small delay for smooth transition
+            });
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
             translate();
             startCountdown();
@@ -1332,6 +1406,7 @@
             initHeroSpotlight();
             initHeroParticles();
             initHeroTilt();
+            initPreloader();
         });
     </script>
 </body>
