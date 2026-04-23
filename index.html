@@ -108,20 +108,11 @@
             padding: 0 20px;
             position: relative;
             overflow: hidden;
-            border-bottom: 5px solid transparent;
+            border-bottom: 5px solid var(--primary);
         }
 
-        /* Animated gradient border */
-        header::after {
-            content: '';
-            position: absolute;
-            bottom: 0; left: 0;
-            width: 100%; height: 5px;
-            background: linear-gradient(90deg, var(--primary), #fff, var(--primary), #fff, var(--primary));
-            background-size: 300% 100%;
-            animation: borderFlow 4s linear infinite;
-            z-index: 2;
-        }
+        /* Animated gradient border - disabled to keep original border style but keep the code for reference */
+        /* header::after { ... } */
 
         @keyframes borderFlow {
             0% { background-position: 0% 50%; }
@@ -225,14 +216,11 @@
         }
 
         .hero-content .brand-26 {
-            animation-delay: 0.2s;
-            transform: translateY(60px) scale(0.9);
+            /* Handled in main .brand-26 class to avoid animation override */
         }
 
         .hero-content .tagline {
-            animation: none;
-            opacity: 1;
-            transform: none;
+            animation-delay: 0.5s;
         }
 
         .hero-content .hero-info {
@@ -264,7 +252,8 @@
             display: block;
             width: 100%;
             overflow: visible;
-            animation: heroGlow 4s ease-in-out infinite;
+            /* Entrance animation only to ensure gradient visibility */
+            animation: heroEntrance 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.2s forwards;
         }
 
         @keyframes heroGlow {
